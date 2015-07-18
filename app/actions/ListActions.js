@@ -4,7 +4,7 @@ import {
   UPDATE_ITEM
 } from '../constants/ActionTypes';
 
-export function add (text) {
+export function addItem (text) {
   return {
     id: Date.now(),
     type: ADD_TO_LIST,

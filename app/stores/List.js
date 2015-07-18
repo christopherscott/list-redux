@@ -27,13 +27,18 @@ export default function list(state = initialState, action) {
     break;
 
   case UPDATE_ITEM:
-    return state.map(item => {
+    console.log('update item list store', action);
+    var newState = state.map(item => {
       if (item.id === action.id) {
+        console.log(item, action.text);
          item.text = action.text;
       }
 
       return item;
     });
+
+    console.log(newState);
+    return newState;
     break;
 
   case DELETE_FROM_LIST:

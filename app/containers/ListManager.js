@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'redux/react';
+import { bindActionCreators } from 'redux';
 import ListView from '../components/ListView';
-import { add, deleteItem, updateItem} from '../actions/ListActions';
+import * as ListActions from '../actions/ListActions';
 
 // decorating this class to recieve 'list' as props,
 // from the overall redux dispatcher/store
@@ -11,36 +12,33 @@ import { add, deleteItem, updateItem} from '../actions/ListActions';
   // was setup in the first place
   list: state.ListStore
 }))
-
 export default class ListManager extends React.Component {
 
   handleSave = (evt) => {
     const input = this.refs.newItemInput.getDOMNode();
     evt.preventDefault();
-    this.props.dispatch(add(input.value));
+    this.props.dispatch(ListActions.addItem(input.value));
     input.value = '';
   }
 
   handleDelete = (id) => {
-    var deleteAction = deleteItem(id);
+    const deleteAction = ListActions.deleteItem(id);
     this.props.dispatch(deleteAction);
   }
 
   handleUpdate = (id, text) => {
-    var action = updateItem(id, text);
+    const action = ListActions.updateItem(id, text);
     this.props.dispatch(action);
   }
 
   render () {
-    var list = this.props.list;
+    const { list, dispatch } = this.props;
+    console.log('list manager', this.props);
 
     return (
       <div>
         <h2>List manager</h2>
-        <ListView
-          list={list}
-          update={this.handleUpdate}
-          delete={this.handleDelete} />
+        <ListView list={list} {...bindActionCreators(ListActions, dispatch)} />
         <form onSubmit={this.handleSave}>
           <input type="text" placeholder="item text" ref="newItemInput" />
           <button>save</button>
